@@ -1,3 +1,4 @@
+//inventory.jsx
 import { useEffect, useState, useCallback } from 'react'
 import { stockAPI, downloadExcel } from '../utils/api'
 import Modal from '../components/Modal'

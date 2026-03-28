@@ -1,3 +1,4 @@
+//sidebar.jsx
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../App'
 import { authAPI } from '../utils/api'

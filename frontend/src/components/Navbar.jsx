@@ -1,3 +1,4 @@
+//navbar.jsx
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../App'
 

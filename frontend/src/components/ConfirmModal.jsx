@@ -1,3 +1,4 @@
+//confirmmodal.jsx
 import Modal from './Modal'
 
 export default function ConfirmModal({ message, onConfirm, onClose }) {

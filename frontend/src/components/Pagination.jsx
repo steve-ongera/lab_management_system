@@ -1,3 +1,4 @@
+//pagination.jsx
 export default function Pagination({ count, page, pageSize = 20, onPage }) {
   const total = Math.ceil(count / pageSize)
   if (total <= 1) return null
