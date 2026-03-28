@@ -17,17 +17,21 @@ export default function Navbar({ sidebarOpen, onToggle }) {
   const loc = useLocation()
 
   const page = titles[loc.pathname] || { label: 'LIMS', icon: 'bi-grid-fill' }
+
   const initials = user
     ? (user.first_name?.[0] || user.username?.[0] || 'U').toUpperCase()
     : 'U'
+
   const displayName = user?.first_name
     ? `${user.first_name} ${user.last_name || ''}`.trim()
     : user?.username || 'User'
 
   return (
-    <header className={`navbar ${sidebarOpen ? '' : 'sidebar-collapsed'}`} role="banner">
-
-      {/* ── Sidebar toggle ── */}
+    <header
+      className={`navbar${sidebarOpen ? '' : ' sidebar-collapsed'}`}
+      role="banner"
+    >
+      {/* Toggle */}
       <button
         className="nav-toggle-btn"
         onClick={onToggle}
@@ -37,23 +41,27 @@ export default function Navbar({ sidebarOpen, onToggle }) {
         <i className={`bi ${sidebarOpen ? 'bi-layout-sidebar' : 'bi-layout-sidebar-reverse'}`}></i>
       </button>
 
-      {/* ── Page title ── */}
+      {/* Page title */}
       <div className="navbar-breadcrumb">
-        <i className={`bi ${page.icon}`} style={{ color: 'var(--text-muted)', fontSize: '1rem' }}></i>
+        <i
+          className={`bi ${page.icon}`}
+          style={{ color: 'var(--text-muted)', fontSize: '1rem' }}
+        ></i>
         <span className="navbar-title">{page.label}</span>
       </div>
 
-      {/* ── Right actions ── */}
+      {/* Right side */}
       <div className="nav-actions">
-
-        {/* Notification stub (optional future use) */}
-        <button className="nav-icon-btn d-none-mobile" aria-label="Notifications" type="button">
+        <button
+          className="nav-icon-btn d-none-mobile"
+          aria-label="Notifications"
+          type="button"
+        >
           <i className="bi bi-bell"></i>
         </button>
 
         <div className="nav-sep d-none-mobile"></div>
 
-        {/* User */}
         <div className="nav-user" role="button" tabIndex={0} aria-label="User menu">
           <div className="nav-user-info d-none-mobile">
             <span className="nav-user-name">{displayName}</span>
@@ -61,7 +69,6 @@ export default function Navbar({ sidebarOpen, onToggle }) {
           </div>
           <div className="nav-avatar" aria-hidden="true">{initials}</div>
         </div>
-
       </div>
     </header>
   )

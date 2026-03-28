@@ -2850,3 +2850,99 @@ textarea:focus-visible {
 .row-highlight td { background: var(--brand-50) !important; }
 
 /* ── End of LIMS Design System ── */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SIDEBAR LAYOUT FIX PATCH
+   Add these rules to the bottom of main.css
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+ * Desktop: sidebar is always in the DOM and position:fixed.
+ * "desktop-hidden" slides it off-screen without the overlay appearing.
+ * This is separate from the mobile .open / not-open drawer behaviour.
+ */
+.sidebar.desktop-hidden {
+  transform: translateX(-100%);
+}
+
+/*
+ * Desktop default: sidebar is visible (no transform needed — remove any
+ * lingering transform from the mobile rules).
+ */
+@media (min-width: 1024px) {
+  /* Sidebar visible on desktop by default */
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  /* Only hide when explicitly desktop-hidden */
+  .sidebar.desktop-hidden {
+    transform: translateX(-100%);
+  }
+
+  /* Never show the overlay on desktop */
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  /* Main content shifts with sidebar */
+  .main-content {
+    margin-left: var(--sidebar-w);
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  /* Navbar shifts with sidebar */
+  .navbar {
+    left: var(--sidebar-w);
+  }
+
+  .navbar.sidebar-collapsed {
+    left: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  /*
+   * Mobile: sidebar is a drawer.
+   * Default: translated off-screen (hidden).
+   * .open: slid in as a drawer (on top of content).
+   */
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 400;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Desktop-hidden class has no meaning on mobile — ignore it */
+  .sidebar.desktop-hidden {
+    transform: translateX(-100%);
+  }
+
+  /* Main content always full-width on mobile */
+  .main-content,
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  /* Navbar always full-width on mobile */
+  .navbar,
+  .navbar.sidebar-collapsed {
+    left: 0;
+  }
+
+  /* Overlay is only used on mobile */
+  .sidebar-overlay {
+    display: none;
+    z-index: 350;
+  }
+
+  .sidebar-overlay.visible {
+    display: block;
+  }
+}
