@@ -1,34 +1,67 @@
-//navbar.jsx
+// Navbar.jsx
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../App'
 
 const titles = {
-  '/': 'Dashboard',
-  '/participants': 'Participants',
-  '/phlebotomy': 'Phlebotomy',
-  '/processing': 'Sample Processing',
-  '/storage': 'Sample Storage',
-  '/inventory': 'Stock Inventory',
-  '/audit': 'Audit Logs',
+  '/':             { label: 'Dashboard',        icon: 'bi-speedometer2' },
+  '/participants': { label: 'Participants',      icon: 'bi-people-fill' },
+  '/phlebotomy':   { label: 'Phlebotomy',        icon: 'bi-droplet-fill' },
+  '/processing':   { label: 'Sample Processing', icon: 'bi-gear-fill' },
+  '/storage':      { label: 'Sample Storage',    icon: 'bi-box-seam-fill' },
+  '/inventory':    { label: 'Stock Inventory',   icon: 'bi-clipboard2-pulse-fill' },
+  '/audit':        { label: 'Audit Logs',        icon: 'bi-journal-text' },
 }
 
 export default function Navbar({ sidebarOpen, onToggle }) {
   const { user } = useAuth()
   const loc = useLocation()
-  const title = titles[loc.pathname] || 'LIMS'
-  const initials = user ? (user.first_name?.[0] || user.username[0]).toUpperCase() : 'U'
+
+  const page = titles[loc.pathname] || { label: 'LIMS', icon: 'bi-grid-fill' }
+  const initials = user
+    ? (user.first_name?.[0] || user.username?.[0] || 'U').toUpperCase()
+    : 'U'
+  const displayName = user?.first_name
+    ? `${user.first_name} ${user.last_name || ''}`.trim()
+    : user?.username || 'User'
 
   return (
-    <header className={`navbar ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
-      <button className="nav-toggle-btn" onClick={onToggle} aria-label="Toggle sidebar">
+    <header className={`navbar ${sidebarOpen ? '' : 'sidebar-collapsed'}`} role="banner">
+
+      {/* ── Sidebar toggle ── */}
+      <button
+        className="nav-toggle-btn"
+        onClick={onToggle}
+        aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+        type="button"
+      >
         <i className={`bi ${sidebarOpen ? 'bi-layout-sidebar' : 'bi-layout-sidebar-reverse'}`}></i>
       </button>
-      <span className="navbar-title">{title}</span>
-      <div className="nav-user">
-        <span className="d-none d-sm-inline text-muted" style={{fontSize:'0.8rem'}}>
-          {user?.first_name ? `${user.first_name} ${user.last_name}` : user?.username}
-        </span>
-        <div className="nav-avatar">{initials}</div>
+
+      {/* ── Page title ── */}
+      <div className="navbar-breadcrumb">
+        <i className={`bi ${page.icon}`} style={{ color: 'var(--text-muted)', fontSize: '1rem' }}></i>
+        <span className="navbar-title">{page.label}</span>
+      </div>
+
+      {/* ── Right actions ── */}
+      <div className="nav-actions">
+
+        {/* Notification stub (optional future use) */}
+        <button className="nav-icon-btn d-none-mobile" aria-label="Notifications" type="button">
+          <i className="bi bi-bell"></i>
+        </button>
+
+        <div className="nav-sep d-none-mobile"></div>
+
+        {/* User */}
+        <div className="nav-user" role="button" tabIndex={0} aria-label="User menu">
+          <div className="nav-user-info d-none-mobile">
+            <span className="nav-user-name">{displayName}</span>
+            <span className="nav-user-role">Lab Staff</span>
+          </div>
+          <div className="nav-avatar" aria-hidden="true">{initials}</div>
+        </div>
+
       </div>
     </header>
   )
