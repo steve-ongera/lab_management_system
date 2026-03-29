@@ -2946,3 +2946,38 @@ textarea:focus-visible {
     display: block;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL CENTER FIX
+   Paste at the very bottom of main.css — overrides the mobile bottom-sheet
+   rules that were pushing modals to the bottom of the screen.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+ * The @media (max-width: 767px) block sets:
+ *   .modal-overlay { align-items: flex-end; padding: 0; }
+ *   .modal { border-radius: ...; margin-top: auto; }
+ *
+ * This was intended for a bottom-sheet UX but breaks the modal centering
+ * on all screen sizes. We restore centered alignment here.
+ */
+@media (max-width: 767px) {
+  .modal-overlay {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px !important;
+    z-index: 1100;
+  }
+
+  .modal {
+    border-radius: var(--radius-lg) !important;
+    margin-top: 0 !important;
+    max-height: 92vh;
+    max-width: calc(100vw - 24px);
+  }
+}
+
+/* Ensure modal overlay always sits above sidebar + navbar on every breakpoint */
+.modal-overlay {
+  z-index: 1100;
+}

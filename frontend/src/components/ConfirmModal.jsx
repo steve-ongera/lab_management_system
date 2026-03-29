@@ -1,5 +1,26 @@
 // ConfirmModal.jsx
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
+
+const overlayStyle = {
+  position: 'fixed',
+  inset: 0,
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: '100%',
+  height: '100%',
+  background: 'rgba(15, 23, 42, 0.55)',
+  backdropFilter: 'blur(3px)',
+  WebkitBackdropFilter: 'blur(3px)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '16px',
+  zIndex: 9999,
+  boxSizing: 'border-box',
+}
 
 export default function ConfirmModal({
   message,
@@ -19,17 +40,29 @@ export default function ConfirmModal({
     }
   }, [onClose])
 
-  return (
+  const modal = (
     <div
-      className="modal-overlay"
+      style={overlayStyle}
       onClick={e => e.target === e.currentTarget && onClose()}
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="confirm-title"
     >
-      <div className="modal modal-sm">
-
-        {/* ── Header ── */}
+      <div
+        style={{
+          background: 'var(--surface)',
+          borderRadius: 'var(--radius-lg)',
+          width: '100%',
+          maxWidth: '420px',
+          maxHeight: '88vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.22)',
+          border: '1px solid var(--border)',
+          animation: 'modal-slide-in 0.22s cubic-bezier(0.34,1.56,0.64,1)',
+        }}
+      >
+        {/* Header */}
         <div className="modal-header">
           <div className="modal-header-icon danger">
             <i className="bi bi-exclamation-triangle-fill"></i>
@@ -38,17 +71,12 @@ export default function ConfirmModal({
             <h5 className="modal-title" id="confirm-title">Confirm Delete</h5>
             <p className="modal-subtitle">This action cannot be undone</p>
           </div>
-          <button
-            className="modal-close"
-            onClick={onClose}
-            aria-label="Close"
-            type="button"
-          >
+          <button className="modal-close" onClick={onClose} aria-label="Close" type="button">
             <i className="bi bi-x-lg"></i>
           </button>
         </div>
 
-        {/* ── Body ── */}
+        {/* Body */}
         <div className="modal-body">
           <div className="confirm-modal-content">
             <div className="confirm-icon-wrap">
@@ -59,14 +87,14 @@ export default function ConfirmModal({
               {message || 'Are you sure you want to delete this record? This cannot be undone.'}
             </p>
             {detail && (
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-subtle)', marginTop: -6 }}>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-subtle)', marginTop: '-6px' }}>
                 {detail}
               </p>
             )}
           </div>
         </div>
 
-        {/* ── Footer ── */}
+        {/* Footer */}
         <div className="modal-footer">
           <button className="btn btn-ghost" onClick={onClose} type="button">
             <i className="bi bi-x"></i> Cancel
@@ -75,8 +103,9 @@ export default function ConfirmModal({
             <i className={`bi ${confirmIcon}`}></i> {confirmLabel}
           </button>
         </div>
-
       </div>
     </div>
   )
+
+  return createPortal(modal, document.body)
 }
